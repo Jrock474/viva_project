@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server"
 
 export const GET = async (request: NextRequest) => {
-
+    const date = request.nextUrl.searchParams.get("date")
+    const continuationToken = request.nextUrl.searchParams.get("continuationToken")
 
     const url = `${process.env.API_BASE_URL}/payments?date=${date}&continuationToken=${continuationToken}`
     const apiToken = process.env.API_TOKEN
