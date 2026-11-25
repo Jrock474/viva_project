@@ -1,19 +1,20 @@
-import { NextRequest } from "next/server"
+import { NextRequest } from "next/server";
 
 export const GET = async (request: NextRequest) => {
-    const date = request.nextUrl.searchParams.get("date")
-    const continuationToken = request.nextUrl.searchParams.get("continuationToken")
+  const date = request.nextUrl.searchParams.get("date");
+  const continuationToken =
+    request.nextUrl.searchParams.get("continuationToken");
 
-    const url = `${process.env.API_BASE_URL}/payments?date=${date}&continuationToken=${continuationToken}`
-    const apiToken = process.env.API_TOKEN
+  const url = `${process.env.API_BASE_URL}/payments?date=${date}&continuationToken=${continuationToken}`;
+  const apiToken = process.env.API_TOKEN;
 
-    const res = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${apiToken}`
-        }
-    })
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+    },
+  });
 
-    const data = await res.json()
+  const data = await res.json();
 
-    return Response.json(data)
-}
+  return Response.json(data, { status: res.status });
+};
