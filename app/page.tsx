@@ -1,6 +1,33 @@
 "use client"
 import { useEffect, useState } from "react"
 
+const dummyPayments = [
+    {
+        paymentId: "payment-001",
+        effectiveDate: "2024-06-28",
+        bankAccountId: "3f9c1a2e-5b7d-4a3f-9c1a",
+        amount: -199.99
+    },
+    {
+        paymentId: "payment-002",
+        effectiveDate: "2024-06-28",
+        bankAccountId: "b4e72f09-8c12-4d6b-a3e8",
+        amount: 199.99
+    },
+    {
+        paymentId: "payment-003",
+        effectiveDate: "2024-06-14",
+        bankAccountId: "0a7f3c1b-2d9e-4b5a",
+        amount: -49.99
+    },
+    {
+        paymentId: "payment-004",
+        effectiveDate: "2024-06-14",
+        bankAccountId: "d92e4f1c-7a6b-4c2e",
+        amount: 5000
+    }
+]
+
 const Home = () => {
 
   interface Payment {
@@ -9,9 +36,10 @@ const Home = () => {
     bankAccountId: string
     amount: number
 }
-    const [date, setDate] = useState("2024-06-28")
+    const [date, setDate] = useState("all")
     const [continuationToken, setContinuationToken] = useState("START")
-    const [payments, setPayments] = useState<Payment[]>([])
+    // const [payments, setPayments] = useState<Payment[]>([])
+    const [payments, setPayments] = useState<Payment[]>(dummyPayments)
     const [showFilter, setShowFilter] = useState(false)
     const [refresh, setRefresh] = useState(0)
 
@@ -22,9 +50,9 @@ const Home = () => {
         return setPayments(data)
     }
 
-    useEffect(() => {
-        getPayments()
-    }, [date])
+    // useEffect(() => {
+    //     getPayments()
+    // }, [date])
 
     return (
       <>
@@ -35,11 +63,17 @@ const Home = () => {
                 className="toolbar-button"
                 onClick={() => setShowFilter(!showFilter)}
             >
-                Filter: {date === "2024-06-28" ? "June 28" : "June 14"} ▾
+                Filter: {date === "2024-06-28" ? "June 28" : date === "2024-06-14" ? "June 14" : "All Dates"} ▾
             </button>
 
             {showFilter && (
                 <div className="filter-menu">
+                  <button onClick={() => {
+                        setDate("all")
+                        setShowFilter(false)
+                    }}>
+                        All Dates
+                    </button>
                     <button onClick={() => {
                         setDate("2024-06-14")
                         setShowFilter(false)
@@ -76,7 +110,10 @@ const Home = () => {
         </thead>
 
         <tbody>
-            {payments.map((payment) => (
+            {(date === "all"
+                ? payments
+                : payments.filter(payment => payment.effectiveDate === date)
+            ).map((payment) => (
                 <tr key={payment.paymentId}>
                     <td className="status-cell">
                         <span className="status-icon">✓</span>
