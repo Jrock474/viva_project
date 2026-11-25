@@ -22,7 +22,45 @@ const Home = () => {
 
     return (
       <>
-     
+      <div className="payments-container">
+    <table className="payments-table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Effective Date</th>
+                <th>Bank Account Id</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {payments.map((payment) => (
+                <tr key={payment.paymentId}>
+                    <td className="status-cell">
+                        <span className="status-icon">✓</span>
+                    </td>
+
+                    <td>
+                        {new Date(`${payment.effectiveDate}T00:00:00`).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric"
+                        })}
+                    </td>
+
+                    <td>{payment.bankAccountId}</td>
+
+                    <td className="amount-cell">
+                        {payment.amount.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD"
+                        })}
+                    </td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+</div>
       </>
     )
 }
