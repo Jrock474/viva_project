@@ -36,10 +36,12 @@ const Home = () => {
     amount: number;
   }
   const [date, setDate] = useState("all");
+  // TODO impliment a way to make the dates dynamic rather than hardcoding.
   const dates = date === "all" ? ["2024-06-14", "2024-06-28"] : [date];
   const [payments, setPayments] = useState<Payment[]>([]);
   // const [payments, setPayments] = useState<Payment[]>(dummyPayments)
   const [showFilter, setShowFilter] = useState(false);
+  // TODO make a more refined way to refresh the payments rather than just incrementing a numbergit 
   const [refresh, setRefresh] = useState(0);
 
   const getPayments = async () => {
