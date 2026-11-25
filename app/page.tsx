@@ -37,22 +37,37 @@ const Home = () => {
     amount: number
 }
     const [date, setDate] = useState("all")
-    const [continuationToken, setContinuationToken] = useState("START")
-    // const [payments, setPayments] = useState<Payment[]>([])
-    const [payments, setPayments] = useState<Payment[]>(dummyPayments)
+    const dates = date === "all" ? ["2024-06-14", "2024-06-28"] : [date]
+    const [payments, setPayments] = useState<Payment[]>([])
+    // const [payments, setPayments] = useState<Payment[]>(dummyPayments)
     const [showFilter, setShowFilter] = useState(false)
     const [refresh, setRefresh] = useState(0)
 
      const getPayments = async () => {
-        const res = await fetch(`/api/payments?date=${date}&continuationToken=${continuationToken}`)
-        const data = await res.json()
+          const allPayments: Payment[] = []
 
-        return setPayments(data)
+      for (const selectedDate of dates) {
+        for (let continuationToken = "START"; continuationToken !== "END";) {
+            const res = await fetch(`/api/payments?date=${selectedDate}&continuationToken=${continuationToken}`)
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch payments:")
+                
+            }
+
+            const data = await res.json()
+
+            allPayments.push(data.data)
+            continuationToken = data.data.paginationToken
+        }
     }
 
-    // useEffect(() => {
-    //     getPayments()
-    // }, [date])
+    setPayments(allPayments)
+    }
+
+    useEffect(() => {
+        getPayments()
+    }, [date, refresh])
 
     return (
       <>
