@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const Home = () => {
 
@@ -19,6 +19,10 @@ const Home = () => {
 
         return setPayments(data)
     }
+
+    useEffect(() => {
+        getPayments()
+    }, [date])
 
     return (
       <>
